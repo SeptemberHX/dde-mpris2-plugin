@@ -15,6 +15,8 @@ public:
     explicit Mpris2Player(QString service, QObject *parent = nullptr);
     PlayerStatus playerStatus();
 
+    const QString& getName();
+
 signals:
     void playStatusChanged(int);
     void metadataChanged();
@@ -26,6 +28,7 @@ public slots:
 
 private:
     OrgMprisMediaPlayer2PlayerInterface *netease;
+    QString name;
 };
 
 #endif // MPRIS2PLAYER_H

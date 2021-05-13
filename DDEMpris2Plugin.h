@@ -10,8 +10,10 @@
 #include <dde-dock/pluginsiteminterface.h>
 #include <QObject>
 #include "ScrollLabel.h"
+#include "Mpris2Player.h"
 #include <QThread>
 #include <QMap>
+#include <QList>
 
 class DDEMpris2Plugin : public QObject, public PluginsItemInterface {
     Q_OBJECT
@@ -45,10 +47,18 @@ public:
 private slots:
     void mprisAccqired(QString name);
     void mprisLost(QString name);
+    void metadataChanged();
 
 private:
+    void setToLastPlayer();
+    void setPlayerStatus(PlayerStatus status);
+    void resetStatus();
+
     DBusMonitor *p_mprisMonitor;
     ScrollLabel *p_label;
+    QList<Mpris2Player*> playerList;
+
+    QString defaultStr;
 };
 
 

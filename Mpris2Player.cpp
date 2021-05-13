@@ -5,6 +5,7 @@
 
 Mpris2Player::Mpris2Player(QString service, QObject *parent) : QObject(parent)
 {
+    this->name = service;
     bool r = QDBusConnection::sessionBus().connect(
                 service,
                 "/org/mpris/MediaPlayer2",
@@ -104,4 +105,8 @@ void Mpris2Player::positionSeeked(qlonglong p)
 {
     std::cout << "=======" << std::endl;
     emit seeked(p);
+}
+
+const QString &Mpris2Player::getName() {
+    return this->name;
 }
