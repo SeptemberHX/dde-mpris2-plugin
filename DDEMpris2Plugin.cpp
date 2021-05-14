@@ -13,8 +13,17 @@ DDEMpris2Plugin::DDEMpris2Plugin(QObject *parent) : QObject(parent) {
     this->defaultStr = "让音乐开始, 让节奏不停";
 
     this->p_label = new ScrollLabel();
-    this->p_label->setFixedWidth(200);
+    this->p_label->setAlignment(Qt::AlignHCenter);
+    this->p_label->setFixedWidth(250);
     this->p_label->setText(this->defaultStr);
+
+    this->p_mpris2Widget = new DDEMpris2Widget();
+
+    this->posTimer_p = new QTimer(this);
+    connect(this->posTimer_p, &QTimer::timeout, this, [this]() {
+        this->currPos += 1000000;
+        this->p_mpris2Widget->updatePosition(this->currPos);
+    });
 
     this->p_mprisMonitor = new DBusMonitor("org.mpris.MediaPlayer2.");
     connect(this->p_mprisMonitor, &DBusMonitor::ownerChanged, this, &DDEMpris2Plugin::mprisAccqired);
@@ -73,17 +82,15 @@ QWidget *DDEMpris2Plugin::itemWidget(const QString &itemKey) {
 }
 
 void DDEMpris2Plugin::mprisAccqired(QString name) {
-    this->p_label->setText(name);
-
-    if (!this->playerList.isEmpty()) {
-        disconnect(this->playerList.last(), &Mpris2Player::metadataChanged, this, &DDEMpris2Plugin::metadataChanged);
-    }
-
     Mpris2Player *player = new Mpris2Player(name);
     for (auto iter = this->playerList.begin(); iter != this->playerList.end(); ++iter) {
         if ((*iter)->getName() == name) {
             this->playerList.erase(iter);
         }
+    }
+
+    if (!this->playerList.isEmpty()) {
+        disconnect(this->playerList.last(), &Mpris2Player::metadataChanged, this, &DDEMpris2Plugin::metadataChanged);
     }
     this->playerList.append(player);
     this->setToLastPlayer();
@@ -119,17 +126,34 @@ void DDEMpris2Plugin::setToLastPlayer() {
 
 void DDEMpris2Plugin::metadataChanged() {
     Mpris2Player *player = dynamic_cast<Mpris2Player*>(QObject::sender());
-    this->setPlayerStatus(player->playerStatus());
+
+    PlayerStatus status = player->playerStatus();
+    this->setPlayerStatus(status);
 }
 
 void DDEMpris2Plugin::setPlayerStatus(PlayerStatus status) {
+    std::cout << status.getPosition() << std::endl;
+    if (status.getPlaybackStatus() == "Playing") {
+        this->posTimer_p->stop();
+        this->posTimer_p->start((int) (1000 / status.getRate()));
+    } else {
+        this->posTimer_p->stop();
+    }
+    this->currPos = status.getPosition();
+
     if (status.getTitle().isEmpty()) {
         this->p_label->setText(this->defaultStr);
     } else {
         this->p_label->setText(status.getTitle() + " - " + status.getArtist());
+        this->p_mpris2Widget->showStatus(status);
     }
 }
 
 void DDEMpris2Plugin::resetStatus() {
     this->p_label->setText(this->defaultStr);
+}
+
+QWidget *DDEMpris2Plugin::itemPopupApplet(const QString &itemKey) {
+    Q_UNUSED(itemKey)
+    return this->p_mpris2Widget;
 }

@@ -2,7 +2,7 @@
 
 PlayerStatus::PlayerStatus()
 {
-
+    this->rate = 1.0;
 }
 
 QString PlayerStatus::getPlaybackStatus() const

@@ -11,9 +11,11 @@
 #include <QObject>
 #include "ScrollLabel.h"
 #include "Mpris2Player.h"
+#include "DDEMpris2Widget.h"
 #include <QThread>
 #include <QMap>
 #include <QList>
+#include <QTimer>
 
 class DDEMpris2Plugin : public QObject, public PluginsItemInterface {
     Q_OBJECT
@@ -32,6 +34,8 @@ public:
     // 插件初始化函数
     void init(PluginProxyInterface *proxyInter) override;
     QWidget *itemWidget(const QString &itemKey) override;
+
+    QWidget *itemPopupApplet(const QString &itemKey) override;
 
     bool pluginIsAllowDisable() override;
     bool pluginIsDisable() override;
@@ -59,6 +63,10 @@ private:
     QList<Mpris2Player*> playerList;
 
     QString defaultStr;
+    DDEMpris2Widget *p_mpris2Widget;
+
+    QTimer *posTimer_p;
+    qlonglong currPos;
 };
 
 

@@ -35,7 +35,12 @@ void ScrollLabel::paintEvent(QPaintEvent *event) {
     if (offset > 0) {
         textStr += this->spaceStr + text();
     }
-    painter.drawText(rect, Qt::AlignVCenter, textStr);
+
+    int flags = this->alignment();
+    if (this->scrollTimer_p->isActive()) {
+        flags &= Qt::AlignLeft;
+    }
+    painter.drawText(rect, flags, textStr);
 }
 
 void ScrollLabel::checkStr() {
