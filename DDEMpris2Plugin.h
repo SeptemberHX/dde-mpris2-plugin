@@ -56,7 +56,7 @@ private slots:
 
 private:
     void setToLastPlayer();
-    void setPlayerStatus(PlayerStatus status);
+    void setPlayerStatus(Mpris2Player *player, PlayerStatus status);
     void resetStatus();
 
     DBusMonitor *p_mprisMonitor;
@@ -68,6 +68,7 @@ private:
 
     QTimer *posTimer_p;
     qlonglong currPos;
+    Mpris2Player *currPlayer;
 };
 
 

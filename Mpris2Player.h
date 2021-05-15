@@ -16,6 +16,11 @@ public:
     PlayerStatus playerStatus();
 
     const QString& getName();
+    qlonglong position();
+
+    void playPrev();
+    void playNext();
+    void playPause();
 
 signals:
     void playStatusChanged(QString);

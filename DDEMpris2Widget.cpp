@@ -9,6 +9,10 @@ DDEMpris2Widget::DDEMpris2Widget(QWidget *parent) :
     ui(new Ui::DDEMpris2Widget)
 {
     ui->setupUi(this);
+
+    connect(ui->prevButton, &QToolButton::clicked, this, [this] () { Q_EMIT prevClicked(); });
+    connect(ui->pausePlayButton, &QToolButton::clicked, this, [this] () { Q_EMIT pausePlayClicked(); });
+    connect(ui->nextButton, &QToolButton::clicked, this, [this] () { Q_EMIT nextClicked(); });
 }
 
 DDEMpris2Widget::~DDEMpris2Widget()
@@ -28,7 +32,9 @@ void DDEMpris2Widget::showStatus(PlayerStatus status) {
         QImage image(url.path());
         ui->artLabel->setPixmap(QPixmap::fromImage(image).scaled(ui->artLabel->size()));
     }
-    this->updatePosition(status.getPosition());
+    // the position in metadata is not reliable for some applications
+    //    we use dbus + timer for position instead
+    //    this->updatePosition(status.getPosition());
 }
 
 void DDEMpris2Widget::updatePosition(qlonglong position) {
@@ -38,3 +44,8 @@ void DDEMpris2Widget::updatePosition(qlonglong position) {
             position / 1000000 / 60).arg(position / 1000000 % 60, 2, 10, QLatin1Char('0')));
     ui->progressBar->setValue((int) (position * 1.0 / this->currStatus.getLength() * 100));
 }
+
+const PlayerStatus& DDEMpris2Widget::getStatus() {
+    return this->currStatus;
+}
+

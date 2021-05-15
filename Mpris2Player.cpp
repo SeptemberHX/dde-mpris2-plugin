@@ -76,6 +76,10 @@ PlayerStatus Mpris2Player::playerStatus()
     return status;
 }
 
+qlonglong Mpris2Player::position() {
+    return this->netease->position();
+}
+
 void Mpris2Player::propertyChanged(QString name, QVariantMap map, QStringList list)
 {
     if (map.contains("PlaybackStatus")) {
@@ -104,4 +108,16 @@ void Mpris2Player::positionSeeked(qlonglong p)
 
 const QString &Mpris2Player::getName() {
     return this->name;
+}
+
+void Mpris2Player::playPrev() {
+    this->netease->Previous();
+}
+
+void Mpris2Player::playNext() {
+    this->netease->Next();
+}
+
+void Mpris2Player::playPause() {
+    this->netease->PlayPause();
 }

@@ -11,6 +11,7 @@
 
 DDEMpris2Plugin::DDEMpris2Plugin(QObject *parent) : QObject(parent) {
     this->defaultStr = "让音乐开始, 让节奏不停";
+    this->currPlayer = nullptr;
 
     this->p_label = new ScrollLabel();
     this->p_label->setAlignment(Qt::AlignHCenter);
@@ -18,12 +19,31 @@ DDEMpris2Plugin::DDEMpris2Plugin(QObject *parent) : QObject(parent) {
     this->p_label->setText(this->defaultStr);
 
     this->p_mpris2Widget = new DDEMpris2Widget();
+    connect(this->p_mpris2Widget, &DDEMpris2Widget::prevClicked, this, [this] () {
+        if (this->currPlayer != nullptr) {
+            this->currPlayer->playPrev();
+        }
+    });
+    connect(this->p_mpris2Widget, &DDEMpris2Widget::pausePlayClicked, this, [this] () {
+        if (this->currPlayer != nullptr) {
+            this->currPlayer->playPause();
+        }
+    });
+    connect(this->p_mpris2Widget, &DDEMpris2Widget::nextClicked, this, [this] () {
+        if (this->currPlayer != nullptr) {
+            this->currPlayer->playNext();
+        }
+    });
 
     this->posTimer_p = new QTimer(this);
     connect(this->posTimer_p, &QTimer::timeout, this, [this]() {
-        this->currPos += 1000000;
-        this->p_mpris2Widget->updatePosition(this->currPos);
+        // maybe it is not so efficient here, it is the most easiest way to get the position
+        //  since no signal is submitted when position is changed
+        // After check how many dbus calls show when I move my mouse, I decide to use this implement.
+        //  and Seeked signal is also not needed anymore.
+        this->p_mpris2Widget->updatePosition(this->currPlayer->position());
     });
+    this->posTimer_p->start(500);
 
     this->p_mprisMonitor = new DBusMonitor("org.mpris.MediaPlayer2.");
     connect(this->p_mprisMonitor, &DBusMonitor::ownerChanged, this, &DDEMpris2Plugin::mprisAccqired);
@@ -124,26 +144,19 @@ void DDEMpris2Plugin::setToLastPlayer() {
     }
     connect(this->playerList.last(), &Mpris2Player::metadataChanged, this, &DDEMpris2Plugin::metadataChanged);
     connect(this->playerList.last(), &Mpris2Player::playStatusChanged, this, &DDEMpris2Plugin::playbackStatusChanged);
-    this->setPlayerStatus(this->playerList.last()->playerStatus());
+    this->setPlayerStatus(this->playerList.last(), this->playerList.last()->playerStatus());
 }
 
 void DDEMpris2Plugin::metadataChanged() {
     Mpris2Player *player = dynamic_cast<Mpris2Player*>(QObject::sender());
 
     PlayerStatus status = player->playerStatus();
-    this->setPlayerStatus(status);
+    this->setPlayerStatus(player, status);
+    this->p_mpris2Widget->updatePosition(player->position());
 }
 
-void DDEMpris2Plugin::setPlayerStatus(PlayerStatus status) {
-    std::cout << status.getPosition() << std::endl;
-    std::cout << status.getPlaybackStatus().toStdString() << std::endl;
-    if (status.getPlaybackStatus() == "Playing") {
-        this->posTimer_p->stop();
-        this->posTimer_p->start((int) (1000 / status.getRate()));
-    } else if (status.getPlaybackStatus() == "Paused" || status.getPlaybackStatus() == "Stopped" ) {
-        this->posTimer_p->stop();
-    }
-    this->currPos = status.getPosition();
+void DDEMpris2Plugin::setPlayerStatus(Mpris2Player *player, PlayerStatus status) {
+    this->currPlayer = player;
 
     if (status.getTitle().isEmpty()) {
         this->p_label->setText(this->defaultStr);
@@ -163,9 +176,10 @@ QWidget *DDEMpris2Plugin::itemPopupApplet(const QString &itemKey) {
 }
 
 void DDEMpris2Plugin::playbackStatusChanged(QString status) {
+    std::cout << "Status: " << status.toStdString() << std::endl;
     if (status == "Playing") {
         this->posTimer_p->stop();
-        this->posTimer_p->start((int) (1000));
+        this->posTimer_p->start(500);
     } else if (status == "Paused" || status == "Stopped" ) {
         this->posTimer_p->stop();
     }

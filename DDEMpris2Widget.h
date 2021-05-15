@@ -19,6 +19,13 @@ public:
     void showStatus(PlayerStatus status);
     void updatePosition(qlonglong position);
 
+    const PlayerStatus& getStatus();
+
+signals:
+    void prevClicked();
+    void nextClicked();
+    void pausePlayClicked();
+
 private:
     Ui::DDEMpris2Widget *ui;
     PlayerStatus currStatus;
