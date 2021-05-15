@@ -79,13 +79,8 @@ PlayerStatus Mpris2Player::playerStatus()
 void Mpris2Player::propertyChanged(QString name, QVariantMap map, QStringList list)
 {
     if (map.contains("PlaybackStatus")) {
-        int status = 0;
-        if (map.value("PlaybackStatus") == QString("Playing")) {
-            status = 1;
-        } else if (map.value("PlaybackStatus") == QString("Stopped")) {
-            status = 2;
-        }
-        emit playStatusChanged(status);
+        std::cout << map.value("PlaybackStatus").toString().toStdString() << std::endl;
+        emit playStatusChanged(map.value("PlaybackStatus").toString());
     }
 
     if (map.contains("Metadata")) {

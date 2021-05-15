@@ -18,7 +18,7 @@ public:
     const QString& getName();
 
 signals:
-    void playStatusChanged(int);
+    void playStatusChanged(QString);
     void metadataChanged();
     void seeked(qlonglong);
 

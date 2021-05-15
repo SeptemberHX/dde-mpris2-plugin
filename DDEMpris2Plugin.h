@@ -52,6 +52,7 @@ private slots:
     void mprisAccqired(QString name);
     void mprisLost(QString name);
     void metadataChanged();
+    void playbackStatusChanged(QString status);
 
 private:
     void setToLastPlayer();

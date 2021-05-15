@@ -91,6 +91,7 @@ void DDEMpris2Plugin::mprisAccqired(QString name) {
 
     if (!this->playerList.isEmpty()) {
         disconnect(this->playerList.last(), &Mpris2Player::metadataChanged, this, &DDEMpris2Plugin::metadataChanged);
+        disconnect(this->playerList.last(), &Mpris2Player::playStatusChanged, this, &DDEMpris2Plugin::playbackStatusChanged);
     }
     this->playerList.append(player);
     this->setToLastPlayer();
@@ -110,6 +111,7 @@ void DDEMpris2Plugin::mprisLost(QString name) {
 
     if (lastPlayer != nullptr) {
         disconnect(lastPlayer, &Mpris2Player::metadataChanged, this, &DDEMpris2Plugin::metadataChanged);
+        disconnect(lastPlayer, &Mpris2Player::playStatusChanged, this, &DDEMpris2Plugin::playbackStatusChanged);
     }
 
     this->setToLastPlayer();
@@ -121,6 +123,7 @@ void DDEMpris2Plugin::setToLastPlayer() {
         return;
     }
     connect(this->playerList.last(), &Mpris2Player::metadataChanged, this, &DDEMpris2Plugin::metadataChanged);
+    connect(this->playerList.last(), &Mpris2Player::playStatusChanged, this, &DDEMpris2Plugin::playbackStatusChanged);
     this->setPlayerStatus(this->playerList.last()->playerStatus());
 }
 
@@ -133,10 +136,11 @@ void DDEMpris2Plugin::metadataChanged() {
 
 void DDEMpris2Plugin::setPlayerStatus(PlayerStatus status) {
     std::cout << status.getPosition() << std::endl;
+    std::cout << status.getPlaybackStatus().toStdString() << std::endl;
     if (status.getPlaybackStatus() == "Playing") {
         this->posTimer_p->stop();
         this->posTimer_p->start((int) (1000 / status.getRate()));
-    } else {
+    } else if (status.getPlaybackStatus() == "Paused" || status.getPlaybackStatus() == "Stopped" ) {
         this->posTimer_p->stop();
     }
     this->currPos = status.getPosition();
@@ -156,4 +160,13 @@ void DDEMpris2Plugin::resetStatus() {
 QWidget *DDEMpris2Plugin::itemPopupApplet(const QString &itemKey) {
     Q_UNUSED(itemKey)
     return this->p_mpris2Widget;
+}
+
+void DDEMpris2Plugin::playbackStatusChanged(QString status) {
+    if (status == "Playing") {
+        this->posTimer_p->stop();
+        this->posTimer_p->start((int) (1000));
+    } else if (status == "Paused" || status == "Stopped" ) {
+        this->posTimer_p->stop();
+    }
 }
