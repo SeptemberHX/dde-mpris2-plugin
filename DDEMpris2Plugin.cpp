@@ -159,7 +159,7 @@ void DDEMpris2Plugin::setPlayerStatus(Mpris2Player *player, PlayerStatus status)
         this->p_itemWidget->setText(status.getTitle() + " - " + status.getArtist());
         this->p_mpris2Widget->showStatus(status);
     }
-    this->p_mpris2Widget->setPlayPauseStatus(this->currPlayer->playbackStatus() == "Playing");
+    this->playbackStatusChanged(this->currPlayer->playbackStatus());
 }
 
 void DDEMpris2Plugin::resetStatus() {
