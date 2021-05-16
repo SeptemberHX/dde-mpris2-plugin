@@ -34,6 +34,7 @@ DDEMpris2Plugin::DDEMpris2Plugin(QObject *parent) : QObject(parent) {
         //  and Seeked signal is also not needed anymore.
         if (this->currPlayer != nullptr) {
             this->p_mpris2Widget->updatePosition(this->currPlayer->position());
+            this->playbackStatusChanged(this->currPlayer->playbackStatus());
         }
     });
 
