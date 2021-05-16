@@ -121,3 +121,7 @@ void Mpris2Player::playNext() {
 void Mpris2Player::playPause() {
     this->netease->PlayPause();
 }
+
+QString Mpris2Player::playbackStatus() {
+    return this->netease->playbackStatus();
+}

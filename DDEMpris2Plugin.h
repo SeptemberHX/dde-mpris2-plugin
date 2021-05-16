@@ -16,6 +16,7 @@
 #include <QMap>
 #include <QList>
 #include <QTimer>
+#include "DDEMpris2ItemWidget.h"
 
 class DDEMpris2Plugin : public QObject, public PluginsItemInterface {
     Q_OBJECT
@@ -54,13 +55,17 @@ private slots:
     void metadataChanged();
     void playbackStatusChanged(QString status);
 
+    void prev();
+    void next();
+    void playPause();
+
 private:
     void setToLastPlayer();
     void setPlayerStatus(Mpris2Player *player, PlayerStatus status);
     void resetStatus();
 
     DBusMonitor *p_mprisMonitor;
-    ScrollLabel *p_label;
+    DDEMpris2ItemWidget *p_itemWidget;
     QList<Mpris2Player*> playerList;
 
     QString defaultStr;

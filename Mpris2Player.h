@@ -17,6 +17,7 @@ public:
 
     const QString& getName();
     qlonglong position();
+    QString playbackStatus();
 
     void playPrev();
     void playNext();

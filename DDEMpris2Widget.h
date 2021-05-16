@@ -20,6 +20,7 @@ public:
     void updatePosition(qlonglong position);
 
     const PlayerStatus& getStatus();
+    void setPlayPauseStatus(bool isPlaying);
 
 signals:
     void prevClicked();

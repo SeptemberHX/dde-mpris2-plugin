@@ -13,6 +13,10 @@ DDEMpris2Widget::DDEMpris2Widget(QWidget *parent) :
     connect(ui->prevButton, &QToolButton::clicked, this, [this] () { Q_EMIT prevClicked(); });
     connect(ui->pausePlayButton, &QToolButton::clicked, this, [this] () { Q_EMIT pausePlayClicked(); });
     connect(ui->nextButton, &QToolButton::clicked, this, [this] () { Q_EMIT nextClicked(); });
+
+    ui->prevButton->setIcon(QIcon(":/icons/resources/prev-black.svg"));
+    ui->nextButton->setIcon(QIcon(":/icons/resources/next-black.svg"));
+    ui->pausePlayButton->setIcon(QIcon(":/icons/resources/play-black.svg"));
 }
 
 DDEMpris2Widget::~DDEMpris2Widget()
@@ -35,6 +39,10 @@ void DDEMpris2Widget::showStatus(PlayerStatus status) {
     // the position in metadata is not reliable for some applications
     //    we use dbus + timer for position instead
     //    this->updatePosition(status.getPosition());
+
+    ui->nextButton->setEnabled(status.getCanGoNext());
+    ui->prevButton->setEnabled(status.getCanGoPrevious());
+    ui->pausePlayButton->setEnabled(status.getCanPlay() && status.getCanPause());
 }
 
 void DDEMpris2Widget::updatePosition(qlonglong position) {
@@ -47,5 +55,13 @@ void DDEMpris2Widget::updatePosition(qlonglong position) {
 
 const PlayerStatus& DDEMpris2Widget::getStatus() {
     return this->currStatus;
+}
+
+void DDEMpris2Widget::setPlayPauseStatus(bool isPlaying) {
+    if (!isPlaying) {
+        ui->pausePlayButton->setIcon(QIcon(":/icons/resources/play-black.svg"));
+    } else {
+        ui->pausePlayButton->setIcon(QIcon(":/icons/resources/pause-black.svg"));
+    }
 }
 
