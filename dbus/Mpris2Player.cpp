@@ -130,3 +130,11 @@ QString Mpris2Player::playbackStatus() {
 QString Mpris2Player::desktopEntry() {
     return this->interface->desktopEntry();
 }
+
+void Mpris2Player::raise() {
+    this->interface->Raise();
+}
+
+void Mpris2Player::quit() {
+    this->interface->Quit();
+}

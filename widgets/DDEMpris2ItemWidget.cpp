@@ -12,6 +12,7 @@ DDEMpris2ItemWidget::DDEMpris2ItemWidget(QWidget *parent) :
     ui->nextButton->setIcon(QIcon(":/icons/resources/next-black.svg"));
     ui->playPauseButton->setIcon(QIcon(":/icons/resources/play-black.svg"));
     ui->entryLabel->hide();
+    ui->entryLabel->installEventFilter(this);
 
     connect(ui->prevButton, &QToolButton::clicked, this, [this] () { Q_EMIT prevClicked(); });
     connect(ui->playPauseButton, &QToolButton::clicked, this, [this] () { Q_EMIT playPauseClicked(); });
@@ -50,5 +51,24 @@ void DDEMpris2ItemWidget::setDesktopEntry(QString entry) {
     } else {
         ui->entryLabel->show();
         ui->entryLabel->setPixmap(QIcon::fromTheme(this->currEntry).pixmap(ui->entryLabel->sizeHint()));
+    }
+}
+
+bool DDEMpris2ItemWidget::eventFilter(QObject *obj, QEvent *event) {
+    if (obj == ui->entryLabel) {
+        if (event->type() == QEvent::MouseButtonPress) {
+            auto *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+            if (mouseEvent->button() == Qt::LeftButton) {
+                Q_EMIT entryClicked();
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    } else {
+        // pass the event on to the parent class
+        return QWidget::eventFilter(obj, event);
     }
 }

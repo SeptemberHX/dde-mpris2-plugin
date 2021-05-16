@@ -20,6 +20,11 @@ DDEMpris2Plugin::DDEMpris2Plugin(QObject *parent) : QObject(parent) {
     connect(this->p_itemWidget, &DDEMpris2ItemWidget::prevClicked, this, &DDEMpris2Plugin::prev);
     connect(this->p_itemWidget, &DDEMpris2ItemWidget::playPauseClicked, this, &DDEMpris2Plugin::playPause);
     connect(this->p_itemWidget, &DDEMpris2ItemWidget::nextClicked, this, &DDEMpris2Plugin::next);
+    connect(this->p_itemWidget, &DDEMpris2ItemWidget::entryClicked, this, [this] () {
+        if (this->currPlayer != nullptr) {
+            this->currPlayer->raise();
+        }
+    });
 
     this->p_mpris2Widget = new DDEMpris2Widget();
     connect(this->p_mpris2Widget, &DDEMpris2Widget::prevClicked, this, &DDEMpris2Plugin::prev);

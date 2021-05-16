@@ -25,8 +25,11 @@ signals:
     void prevClicked();
     void playPauseClicked();
     void nextClicked();
+    void entryClicked();
 
 private:
+    bool eventFilter(QObject *obj, QEvent *event) override;
+
     Ui::DDEMpris2ItemWidget *ui;
     QString currEntry;
 };

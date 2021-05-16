@@ -23,6 +23,9 @@ public:
     void playNext();
     void playPause();
 
+    void raise();
+    void quit();
+
     QString desktopEntry();
 
 signals:
