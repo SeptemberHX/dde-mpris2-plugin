@@ -6,17 +6,17 @@
 #define DDE_PSTATE_DDEPSTATEPLUGIN_H
 
 #include "DDEMpris2Plugin.h"
-#include "DBusMonitor.h"
+#include "dbus/DBusMonitor.h"
 #include <dde-dock/pluginsiteminterface.h>
 #include <QObject>
-#include "ScrollLabel.h"
-#include "Mpris2Player.h"
-#include "DDEMpris2Widget.h"
+#include "widgets/ScrollLabel.h"
+#include "dbus/Mpris2Player.h"
+#include "widgets/DDEMpris2Widget.h"
 #include <QThread>
 #include <QMap>
 #include <QList>
 #include <QTimer>
-#include "DDEMpris2ItemWidget.h"
+#include "widgets/DDEMpris2ItemWidget.h"
 
 class DDEMpris2Plugin : public QObject, public PluginsItemInterface {
     Q_OBJECT

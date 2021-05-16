@@ -240,7 +240,7 @@
   <customwidget>
    <class>ScrollLabel</class>
    <extends>QLabel</extends>
-   <header>ScrollLabel.h</header>
+   <header>./widgets/ScrollLabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

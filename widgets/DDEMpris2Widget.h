@@ -2,7 +2,7 @@
 #define DDEMPRIS2WIDGET_H
 
 #include <QWidget>
-#include "PlayerStatus.h"
+#include "dbus/PlayerStatus.h"
 
 namespace Ui {
 class DDEMpris2Widget;
