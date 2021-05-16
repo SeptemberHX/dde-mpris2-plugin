@@ -160,6 +160,7 @@ void DDEMpris2Plugin::setPlayerStatus(Mpris2Player *player, PlayerStatus status)
         this->p_mpris2Widget->showStatus(status);
     }
     this->playbackStatusChanged(this->currPlayer->playbackStatus());
+    this->p_itemWidget->setDesktopEntry(this->currPlayer->desktopEntry());
 }
 
 void DDEMpris2Plugin::resetStatus() {

@@ -23,6 +23,8 @@ public:
     void playNext();
     void playPause();
 
+    QString desktopEntry();
+
 signals:
     void playStatusChanged(QString);
     void metadataChanged();
@@ -33,7 +35,8 @@ public slots:
     void positionSeeked(qlonglong p);
 
 private:
-    OrgMprisMediaPlayer2PlayerInterface *netease;
+    OrgMprisMediaPlayer2PlayerInterface *playerInterface;
+    OrgMprisMediaPlayer2Interface *interface;
     QString name;
 };
 

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "DDEMpris2ItemWidget.h"
 #include "ui_DDEMpris2ItemWidget.h"
 
@@ -10,6 +11,7 @@ DDEMpris2ItemWidget::DDEMpris2ItemWidget(QWidget *parent) :
     ui->prevButton->setIcon(QIcon(":/icons/resources/prev-black.svg"));
     ui->nextButton->setIcon(QIcon(":/icons/resources/next-black.svg"));
     ui->playPauseButton->setIcon(QIcon(":/icons/resources/play-black.svg"));
+    ui->entryLabel->hide();
 
     connect(ui->prevButton, &QToolButton::clicked, this, [this] () { Q_EMIT prevClicked(); });
     connect(ui->playPauseButton, &QToolButton::clicked, this, [this] () { Q_EMIT playPauseClicked(); });
@@ -34,5 +36,19 @@ void DDEMpris2ItemWidget::setPlayblackStatus(bool isPlaying) {
         ui->playPauseButton->setIcon(QIcon(":/icons/resources/pause-black.svg"));
     } else {
         ui->playPauseButton->setIcon(QIcon(":/icons/resources/play-black.svg"));
+    }
+}
+
+void DDEMpris2ItemWidget::setDesktopEntry(QString entry) {
+    if (entry == this->currEntry) {
+        return;
+    }
+
+    this->currEntry = entry;
+    if (this->currEntry.isEmpty()) {
+        ui->entryLabel->hide();
+    } else {
+        ui->entryLabel->show();
+        ui->entryLabel->setPixmap(QIcon::fromTheme(this->currEntry).pixmap(ui->entryLabel->sizeHint()));
     }
 }

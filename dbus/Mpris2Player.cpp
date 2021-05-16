@@ -30,25 +30,26 @@ Mpris2Player::Mpris2Player(QString service, QObject *parent) : QObject(parent)
         qDebug() << "Connection failed";
     }
 
-    this->netease = new OrgMprisMediaPlayer2PlayerInterface(service, "/org/mpris/MediaPlayer2", QDBusConnection::sessionBus(), this);
+    this->playerInterface = new OrgMprisMediaPlayer2PlayerInterface(service, "/org/mpris/MediaPlayer2", QDBusConnection::sessionBus(), this);
+    this->interface = new OrgMprisMediaPlayer2Interface(service, "/org/mpris/MediaPlayer2", QDBusConnection::sessionBus(), this);
 }
 
 PlayerStatus Mpris2Player::playerStatus()
 {
     PlayerStatus status;
-    status.setPlaybackStatus(this->netease->playbackStatus());
-    status.setLoopStatus(this->netease->loopStatus());
-    status.setPosition(this->netease->position());
-    status.setRate(this->netease->rate());
-    status.setShuffle(this->netease->shuffle());
-    status.setCanGoNext(this->netease->canGoNext());
-    status.setCanGoPrevious(this->netease->canGoPrevious());
-    status.setCanPlay(this->netease->canPlay());
-    status.setCanPause(this->netease->canPause());
-    status.setCanSeek(this->netease->canSeek());
-    status.setCanControl(this->netease->canControl());
+    status.setPlaybackStatus(this->playerInterface->playbackStatus());
+    status.setLoopStatus(this->playerInterface->loopStatus());
+    status.setPosition(this->playerInterface->position());
+    status.setRate(this->playerInterface->rate());
+    status.setShuffle(this->playerInterface->shuffle());
+    status.setCanGoNext(this->playerInterface->canGoNext());
+    status.setCanGoPrevious(this->playerInterface->canGoPrevious());
+    status.setCanPlay(this->playerInterface->canPlay());
+    status.setCanPause(this->playerInterface->canPause());
+    status.setCanSeek(this->playerInterface->canSeek());
+    status.setCanControl(this->playerInterface->canControl());
 
-    QVariantMap metadataMap = this->netease->metadata();
+    QVariantMap metadataMap = this->playerInterface->metadata();
     if (metadataMap.contains("mpris:artUrl")) {
         status.setArtUrl(metadataMap.value("mpris:artUrl").toString());
     }
@@ -77,7 +78,7 @@ PlayerStatus Mpris2Player::playerStatus()
 }
 
 qlonglong Mpris2Player::position() {
-    return this->netease->position();
+    return this->playerInterface->position();
 }
 
 void Mpris2Player::propertyChanged(QString name, QVariantMap map, QStringList list)
@@ -111,17 +112,21 @@ const QString &Mpris2Player::getName() {
 }
 
 void Mpris2Player::playPrev() {
-    this->netease->Previous();
+    this->playerInterface->Previous();
 }
 
 void Mpris2Player::playNext() {
-    this->netease->Next();
+    this->playerInterface->Next();
 }
 
 void Mpris2Player::playPause() {
-    this->netease->PlayPause();
+    this->playerInterface->PlayPause();
 }
 
 QString Mpris2Player::playbackStatus() {
-    return this->netease->playbackStatus();
+    return this->playerInterface->playbackStatus();
+}
+
+QString Mpris2Player::desktopEntry() {
+    return this->interface->desktopEntry();
 }

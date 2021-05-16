@@ -19,6 +19,7 @@ public:
     void setText(QString text);
 
     void setPlayblackStatus(bool isPlaying);
+    void setDesktopEntry(QString entry);
 
 signals:
     void prevClicked();
@@ -27,6 +28,7 @@ signals:
 
 private:
     Ui::DDEMpris2ItemWidget *ui;
+    QString currEntry;
 };
 
 #endif // DDEMPRIS2ITEMWIDGET_H
