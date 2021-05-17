@@ -13,6 +13,8 @@ DDEMpris2Plugin::DDEMpris2Plugin(QObject *parent) : QObject(parent) {
     this->defaultStr = "让音乐开始, 让节奏不停";
     this->currPlayer = nullptr;
 
+    this->lyricFetcher = new QQLyricFetcher();
+
     this->p_itemWidget = new DDEMpris2ItemWidget();
     this->p_itemWidget->setFixedWidth(250);
     this->p_itemWidget->setTextAlign(Qt::AlignHCenter);
@@ -162,6 +164,9 @@ void DDEMpris2Plugin::setPlayerStatus(Mpris2Player *player, PlayerStatus status)
         this->p_itemWidget->setText(this->defaultStr);
     } else {
         this->p_itemWidget->setText(status.getTitle() + " - " + status.getArtist());
+        if (status.getTitle() != this->p_mpris2Widget->getStatus().getTitle() && status.getArtist() != this->p_mpris2Widget->getStatus().getArtist()) {
+            this->lyricFetcher->requestForLyric(status.getTitle(), status.getArtist());
+        }
         this->p_mpris2Widget->showStatus(status);
     }
     this->playbackStatusChanged(this->currPlayer->playbackStatus());

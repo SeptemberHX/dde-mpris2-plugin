@@ -45,6 +45,7 @@ find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
 find_package(DtkGui REQUIRED)
+find_package(Qt5Network REQUIRED)
 
 # find_package 命令还可以用来加载 cmake 的功能模块
 # 并不是所有的库都直接支持 cmake 查找的，但大部分都支持了 pkg-config 这个标准，
@@ -88,7 +89,7 @@ add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
 # SHARED 表示生成的库应该是动态库，
 # 变量 ${PLUGIN_NAME} 和 ${SRCS} 都是前面处理好的，
 # 另外 qrc 资源文件也应该追加在后面以编译进目标中。
-add_library(${PLUGIN_NAME} SHARED ${SRCS} ${UIS_HDRS} ${QM_FILES} dbus/DBusMonitor.cpp dbus/DBusMonitor.h dbus/dbusinterface.h)
+add_library(${PLUGIN_NAME} SHARED ${SRCS} ${UIS_HDRS} ${QM_FILES} dbus/DBusMonitor.cpp dbus/DBusMonitor.h dbus/dbusinterface.h lyric/QQLyricFetcher.cpp lyric/QQLyricFetcher.h lyric/AbstractLyricFetcher.h)
 
 # 设置目标的生成位置，这里表示生成在执行 make 的目录,
 # 另外还有很多可用于设置的属性，可查阅 cmake 文档。
@@ -99,6 +100,7 @@ set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ./)
 # 当出现编译失败提示找不到某些库的头文件时应该检查此处是否将所有需要的头文件都包含了
 target_include_directories(${PLUGIN_NAME} PUBLIC
         ${Qt5Widgets_INCLUDE_DIRS}
+        ${Qt5Network_INCLUDE_DIRS}
         ${Qt5DBus_INCLUDE_DIRS}
         ${DtkWidget_INCLUDE_DIRS}
         ${DdeDockInterface_INCLUDE_DIRS}
@@ -118,6 +120,7 @@ target_compile_definitions(${PLUGIN_NAME} PUBLIC
 target_link_libraries(${PLUGIN_NAME} PRIVATE
         ${Qt5Widgets_LIBRARIES}
         ${DtkWidget_LIBRARIES}
+        ${Qt5Network_LIBRARIES}
         ${DdeDockInterface_LIBRARIES}
         ${Qt5DBus_LIBRARIES}
         )

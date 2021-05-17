@@ -17,6 +17,8 @@
 #include <QList>
 #include <QTimer>
 #include "widgets/DDEMpris2ItemWidget.h"
+#include "lyric/AbstractLyricFetcher.h"
+#include "lyric/QQLyricFetcher.h"
 
 class DDEMpris2Plugin : public QObject, public PluginsItemInterface {
     Q_OBJECT
@@ -74,6 +76,8 @@ private:
     QTimer *posTimer_p;
     qlonglong currPos;
     Mpris2Player *currPlayer;
+
+    AbstractLyricFetcher *lyricFetcher;
 };
 
 
