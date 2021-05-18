@@ -6,6 +6,7 @@
 #define DDE_MPRIS2_ABSTRACTLYRICFETCHER_H
 
 #include <QObject>
+#include "MLyric.h"
 
 class AbstractLyricFetcher : public QObject {
 
@@ -14,10 +15,10 @@ class AbstractLyricFetcher : public QObject {
 public:
     AbstractLyricFetcher() = default;
 
-    virtual void requestForLyric(QString title, QString artist) = 0;
+    virtual void requestForLyric(QString title, QString artist, QString album) = 0;
 
 signals:
-    void lyricFetched();
+    void lyricFetched(MLyric);
 };
 
 #endif //DDE_MPRIS2_ABSTRACTLYRICFETCHER_H

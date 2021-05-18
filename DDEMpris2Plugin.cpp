@@ -14,6 +14,7 @@ DDEMpris2Plugin::DDEMpris2Plugin(QObject *parent) : QObject(parent) {
     this->currPlayer = nullptr;
 
     this->lyricFetcher = new QQLyricFetcher();
+    connect(this->lyricFetcher, &AbstractLyricFetcher::lyricFetched, this, &DDEMpris2Plugin::lyricFetched);
 
     this->p_itemWidget = new DDEMpris2ItemWidget();
     this->p_itemWidget->setFixedWidth(250);
@@ -40,7 +41,9 @@ DDEMpris2Plugin::DDEMpris2Plugin(QObject *parent) : QObject(parent) {
         // After check how many dbus calls show when I move my mouse, I decide to use this implement.
         //  and Seeked signal is also not needed anymore.
         if (this->currPlayer != nullptr) {
-            this->p_mpris2Widget->updatePosition(this->currPlayer->position());
+            qlonglong t = this->currPlayer->position();
+            this->p_mpris2Widget->updatePosition(t);
+            this->showLyric(t);
             this->playbackStatusChanged(this->currPlayer->playbackStatus());
         }
     });
@@ -50,7 +53,7 @@ DDEMpris2Plugin::DDEMpris2Plugin(QObject *parent) : QObject(parent) {
     connect(this->p_mprisMonitor, &DBusMonitor::ownerLost, this, &DDEMpris2Plugin::mprisLost);
     this->p_mprisMonitor->init();
 
-    this->posTimer_p->start(500);
+    this->posTimer_p->start(200);
 }
 
 const QString DDEMpris2Plugin::pluginName() const {
@@ -163,11 +166,11 @@ void DDEMpris2Plugin::setPlayerStatus(Mpris2Player *player, PlayerStatus status)
     if (status.getTitle().isEmpty()) {
         this->p_itemWidget->setText(this->defaultStr);
     } else {
-        this->p_itemWidget->setText(status.getTitle() + " - " + status.getArtist());
         if (status.getTitle() != this->p_mpris2Widget->getStatus().getTitle() && status.getArtist() != this->p_mpris2Widget->getStatus().getArtist()) {
-            this->lyricFetcher->requestForLyric(status.getTitle(), status.getArtist());
+            this->lyricFetcher->requestForLyric(status.getTitle(), status.getArtist(), status.getAlbum());
+            this->p_itemWidget->setText(status.getTitle() + " - " + status.getArtist());
+            this->p_mpris2Widget->showStatus(status);
         }
-        this->p_mpris2Widget->showStatus(status);
     }
     this->playbackStatusChanged(this->currPlayer->playbackStatus());
     this->p_itemWidget->setDesktopEntry(this->currPlayer->desktopEntry());
@@ -212,5 +215,15 @@ void DDEMpris2Plugin::next() {
 void DDEMpris2Plugin::playPause() {
     if (this->currPlayer != nullptr) {
         this->currPlayer->playPause();
+    }
+}
+
+void DDEMpris2Plugin::lyricFetched(MLyric lyric) {
+    this->currLyric = lyric;
+}
+
+void DDEMpris2Plugin::showLyric(qlonglong t) {
+    if (!this->currLyric.isEmpty()) {
+        this->p_itemWidget->setText(this->currLyric.getByTime(t));
     }
 }

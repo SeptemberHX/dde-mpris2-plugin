@@ -19,6 +19,7 @@
 #include "widgets/DDEMpris2ItemWidget.h"
 #include "lyric/AbstractLyricFetcher.h"
 #include "lyric/QQLyricFetcher.h"
+#include "lyric/MLyric.h"
 
 class DDEMpris2Plugin : public QObject, public PluginsItemInterface {
     Q_OBJECT
@@ -47,6 +48,7 @@ public:
 
     const QString pluginDisplayName() const override;
     void pluginSettingsChanged() override;
+    void showLyric(qlonglong t);
 
 //    int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
 //    void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
@@ -56,6 +58,7 @@ private slots:
     void mprisLost(QString name);
     void metadataChanged();
     void playbackStatusChanged(QString status);
+    void lyricFetched(MLyric lyric);
 
     void prev();
     void next();
@@ -78,6 +81,7 @@ private:
     Mpris2Player *currPlayer;
 
     AbstractLyricFetcher *lyricFetcher;
+    MLyric currLyric;
 };
 
 
