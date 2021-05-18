@@ -59,9 +59,7 @@ void QQLyricFetcher::songGetFinished(QNetworkReply *reply) {
                 std::cout << "code: " << jsonResponse["code"].toInt() << std::endl;
                 if (jsonResponse["code"].toInt() == 0) {
                     QString lyric = jsonResponse["lyric"].toString();
-                    std::cout << lyric.toStdString() << std::endl;
                     MLyric formatedLyric(lyric);
-                    formatedLyric.print();
                     Q_EMIT lyricFetched(formatedLyric);
                 }
             }
