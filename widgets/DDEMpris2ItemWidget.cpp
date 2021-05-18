@@ -72,3 +72,7 @@ bool DDEMpris2ItemWidget::eventFilter(QObject *obj, QEvent *event) {
         return QWidget::eventFilter(obj, event);
     }
 }
+
+QString DDEMpris2ItemWidget::text() {
+    return ui->label->text();
+}

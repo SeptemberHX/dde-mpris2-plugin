@@ -17,6 +17,7 @@ public:
 
     void setTextAlign(Qt::AlignmentFlag align);
     void setText(QString text);
+    QString text();
 
     void setPlayblackStatus(bool isPlaying);
     void setDesktopEntry(QString entry);
