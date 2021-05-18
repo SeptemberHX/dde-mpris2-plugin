@@ -11,6 +11,7 @@ class ScrollLabel : public QLabel
 public:
     ScrollLabel(QWidget *parent = nullptr);
     void setText(const QString &text);
+    void setText(const QString &text, qlonglong timeInUs);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -21,8 +22,10 @@ private:
     void scrollTimerEvent();
 
     QTimer *scrollTimer_p;
-    int offset;
+    double offset;
     QString spaceStr;
+
+    qlonglong drawTimeLength;
 };
 
 #endif // SCROLLLABEL_H

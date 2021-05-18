@@ -1,6 +1,7 @@
 #include "ScrollLabel.h"
 #include <QPainter>
 #include <QRect>
+#include <iostream>
 
 ScrollLabel::ScrollLabel(QWidget *parent)
     : QLabel(parent)
@@ -13,11 +14,27 @@ ScrollLabel::ScrollLabel(QWidget *parent)
 
 void ScrollLabel::scrollTimerEvent() {
     if (this->isVisible()) {
-        this->offset += 2;
-
         QFontMetrics fm(this->font());
-        if (fm.width(text()) + fm.width(this->spaceStr) < this->offset) {
-            this->offset = 0;
+        int spaceWidth = 0;
+        if (this->drawTimeLength == 0) {
+            spaceWidth += fm.width(this->spaceStr);
+        }
+
+        int textLength = fm.width(text());
+        if (this->drawTimeLength == 0) {
+            this->offset += 1;
+        } else {
+            this->offset += (textLength - this->width()) * 1.0 / (this->drawTimeLength * 1.0 / 1000 / 33);
+        }
+
+        if (textLength + spaceWidth < this->offset) {
+            if (this->drawTimeLength == 0) {
+                this->offset = 0;
+            }
+        }
+
+        if (this->drawTimeLength != 0 && this->offset > textLength - this->width()) {
+            this->offset = textLength - this->width();
         }
         this->repaint();
         return;
@@ -32,7 +49,7 @@ void ScrollLabel::paintEvent(QPaintEvent *event) {
     rect.setLeft(rect.left() - offset);
 
     QString textStr = this->text();
-    if (offset > 0) {
+    if (offset > 0 && this->drawTimeLength == 0) {
         textStr += this->spaceStr + text();
     }
 
@@ -50,7 +67,8 @@ void ScrollLabel::checkStr() {
         this->offset = 0;
         this->scrollTimer_p->stop();
     } else {
-        this->scrollTimer_p->start(200);
+        // about 30 fps
+        this->scrollTimer_p->start(33);
     }
 }
 
@@ -61,7 +79,13 @@ void ScrollLabel::resizeEvent(QResizeEvent *event) {
 }
 
 void ScrollLabel::setText(const QString &text) {
-    QLabel::setText(text);
+    this->setText(text, 0);
+}
 
+void ScrollLabel::setText(const QString &text, qlonglong timeInUs) {
+    if (timeInUs < 0) timeInUs = 0;
+    QLabel::setText(text);
+    this->offset = 0;
+    this->drawTimeLength = timeInUs;
     this->checkStr();
 }

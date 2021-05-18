@@ -226,7 +226,8 @@ void DDEMpris2Plugin::showLyric(qlonglong t) {
     if (!this->currLyric.isEmpty()) {
         QString str = this->currLyric.getByTime(t);
         if (this->p_itemWidget->text() != str && !str.isEmpty()) {
-            this->p_itemWidget->setText(this->currLyric.getByTime(t));
+            auto r = this->currLyric.getWithTimeRange(t);
+            this->p_itemWidget->setText(r.second, r.first.second - r.first.first);
         }
     }
 }
