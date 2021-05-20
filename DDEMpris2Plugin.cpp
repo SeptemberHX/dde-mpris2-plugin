@@ -6,6 +6,7 @@
 #include <QJsonObject>
 #include <QDebug>
 #include <iostream>
+#include <QTextDocument>
 
 #define PLUGIN_STATE_KEY "enable"
 
@@ -182,6 +183,7 @@ void DDEMpris2Plugin::setPlayerStatus(Mpris2Player *player, PlayerStatus status)
         this->p_itemWidget->setText(this->defaultStr);
     } else {
         if (status.getTitle() != this->p_mpris2Widget->getStatus().getTitle() && status.getArtist() != this->p_mpris2Widget->getStatus().getArtist()) {
+            this->currLyric = MLyric();
             this->lyricFetcher->requestForLyric(status.getTitle(), status.getArtist(), status.getAlbum());
             this->p_itemWidget->setText(status.getTitle() + " - " + status.getArtist());
             this->p_mpris2Widget->showStatus(status);
@@ -242,7 +244,9 @@ void DDEMpris2Plugin::showLyric(qlonglong t) {
         QString str = this->currLyric.getByTime(t);
         if (this->p_itemWidget->text() != str && !str.isEmpty()) {
             auto r = this->currLyric.getWithTimeRange(t);
-            this->p_itemWidget->setText(r.second, r.first.second - r.first.first);
+            QTextDocument text;
+            text.setHtml(r.second);
+            this->p_itemWidget->setText(text.toPlainText(), r.first.second - r.first.first);
         }
     }
 }
