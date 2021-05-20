@@ -78,6 +78,11 @@ private:
 
     QTimer *posTimer_p;
     qlonglong currPos;
+    int samePosCount;
+public:
+    qlonglong getCurrPos() const;
+
+private:
     Mpris2Player *currPlayer;
 
     AbstractLyricFetcher *lyricFetcher;

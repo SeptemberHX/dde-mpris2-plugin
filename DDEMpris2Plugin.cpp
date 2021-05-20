@@ -44,7 +44,22 @@ DDEMpris2Plugin::DDEMpris2Plugin(QObject *parent) : QObject(parent) {
             qlonglong t = this->currPlayer->position();
             this->p_mpris2Widget->updatePosition(t);
             this->showLyric(t);
-            this->playbackStatusChanged(this->currPlayer->playbackStatus());
+
+            // some applications do not update playback status after pause/play, this is a trick to fix this.
+            QString status = this->currPlayer->playbackStatus();
+            if (this->samePosCount < 5) {
+                this->playbackStatusChanged(status);
+            }
+            if (this->currPos == t) {
+                ++this->samePosCount;
+                if (this->samePosCount >= 5) {
+                    this->playbackStatusChanged("Paused");
+                    this->samePosCount = 5;
+                }
+            } else {
+                this->samePosCount = 0;
+            }
+            this->currPos = t;
         }
     });
 
@@ -230,4 +245,8 @@ void DDEMpris2Plugin::showLyric(qlonglong t) {
             this->p_itemWidget->setText(r.second, r.first.second - r.first.first);
         }
     }
+}
+
+qlonglong DDEMpris2Plugin::getCurrPos() const {
+    return currPos;
 }
