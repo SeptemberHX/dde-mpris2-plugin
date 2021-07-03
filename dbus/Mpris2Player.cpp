@@ -56,6 +56,8 @@ PlayerStatus Mpris2Player::playerStatus()
 
     if (metadataMap.contains("mpris:length")) {
         status.setLength(metadataMap.value("mpris:length").toLongLong());
+    } else {
+        status.setLength(0);
     }
 
     if (metadataMap.contains("xesam:album")) {

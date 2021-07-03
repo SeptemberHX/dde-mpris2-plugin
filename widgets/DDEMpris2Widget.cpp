@@ -6,7 +6,8 @@
 
 DDEMpris2Widget::DDEMpris2Widget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::DDEMpris2Widget)
+    ui(new Ui::DDEMpris2Widget),
+    isDefault(false)
 {
     ui->setupUi(this);
 
@@ -17,6 +18,8 @@ DDEMpris2Widget::DDEMpris2Widget(QWidget *parent) :
     ui->prevButton->setIcon(QIcon(":/icons/resources/prev-black.svg"));
     ui->nextButton->setIcon(QIcon(":/icons/resources/next-black.svg"));
     ui->pausePlayButton->setIcon(QIcon(":/icons/resources/play-black.svg"));
+
+    this->resetToDefault();
 }
 
 DDEMpris2Widget::~DDEMpris2Widget()
@@ -25,6 +28,7 @@ DDEMpris2Widget::~DDEMpris2Widget()
 }
 
 void DDEMpris2Widget::showStatus(PlayerStatus status) {
+    this->isDefault = false;
     this->currStatus = status;
 
     ui->titleLabel->setText(this->currStatus.getTitle());
@@ -36,9 +40,7 @@ void DDEMpris2Widget::showStatus(PlayerStatus status) {
         QImage image(url.path());
         ui->artLabel->setPixmap(QPixmap::fromImage(image).scaled(ui->artLabel->size()));
     }
-    // the position in metadata is not reliable for some applications
-    //    we use dbus + timer for position instead
-    //    this->updatePosition(status.getPosition());
+    this->updatePosition(status.getPosition());
 
     ui->nextButton->setEnabled(status.getCanGoNext());
     ui->prevButton->setEnabled(status.getCanGoPrevious());
@@ -46,6 +48,16 @@ void DDEMpris2Widget::showStatus(PlayerStatus status) {
 }
 
 void DDEMpris2Widget::updatePosition(qlonglong position) {
+    if (this->currStatus.getLength() == 0) {
+        ui->progressWidget->setDisabled(true);
+        ui->leftLabel->clear();
+        ui->posLabel->clear();
+        ui->progressBar->setValue(0);
+        return;
+    } else {
+        ui->progressWidget->setEnabled(true);
+    }
+
     qlonglong leftTime = this->currStatus.getLength() - position;
     ui->leftLabel->setText(QString("-%1:%2").arg(leftTime / 1000000 / 60).arg(leftTime / 1000000 % 60, 2, 10, QLatin1Char('0')));
     ui->posLabel->setText(QString("%1:%2").arg(
@@ -65,3 +77,18 @@ void DDEMpris2Widget::setPlayPauseStatus(bool isPlaying) {
     }
 }
 
+void DDEMpris2Widget::resetToDefault() {
+    if (!this->isDefault) {
+        ui->titleLabel->setText(tr("没有音乐播放器"));
+        ui->artistLabel->setText("");
+        ui->albumLabel->setText("");
+        ui->artLabel->clear();
+        this->updatePosition(0);
+        ui->leftLabel->setText(0);
+
+        ui->nextButton->setEnabled(false);
+        ui->prevButton->setEnabled(false);
+        ui->pausePlayButton->setEnabled(false);
+        this->isDefault = true;
+    }
+}

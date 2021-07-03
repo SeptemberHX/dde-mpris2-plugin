@@ -42,16 +42,16 @@ DDEMpris2Plugin::DDEMpris2Plugin(QObject *parent) : QObject(parent) {
         // After check how many dbus calls show when I move my mouse, I decide to use this implement.
         //  and Seeked signal is also not needed anymore.
         if (this->currPlayer != nullptr) {
-            qlonglong t = this->currPlayer->position();
-            this->p_mpris2Widget->updatePosition(t);
-            this->showLyric(t);
+            PlayerStatus status = this->currPlayer->playerStatus();
+//            this->p_mpris2Widget->updatePosition(status.getPosition());
+            this->showLyric(status.getPosition());
+            this->p_mpris2Widget->showStatus(status);
 
             // some applications do not update playback status after pause/play, this is a trick to fix this.
-            QString status = this->currPlayer->playbackStatus();
             if (this->samePosCount < 5) {
-                this->playbackStatusChanged(status);
+                this->playbackStatusChanged(status.getPlaybackStatus());
             }
-            if (this->currPos == t) {
+            if (this->currPos == status.getPosition()) {
                 ++this->samePosCount;
                 if (this->samePosCount >= 5) {
                     this->playbackStatusChanged("Paused");
@@ -60,7 +60,9 @@ DDEMpris2Plugin::DDEMpris2Plugin(QObject *parent) : QObject(parent) {
             } else {
                 this->samePosCount = 0;
             }
-            this->currPos = t;
+            this->currPos = status.getPosition();
+        } else {
+            this->p_mpris2Widget->resetToDefault();
         }
     });
 
@@ -196,7 +198,6 @@ void DDEMpris2Plugin::setPlayerStatus(Mpris2Player *player, PlayerStatus status)
 void DDEMpris2Plugin::resetStatus() {
     this->p_itemWidget->setText(this->defaultStr);
     this->currPlayer = nullptr;
-    this->posTimer_p->stop();
 }
 
 QWidget *DDEMpris2Plugin::itemPopupApplet(const QString &itemKey) {
@@ -205,13 +206,6 @@ QWidget *DDEMpris2Plugin::itemPopupApplet(const QString &itemKey) {
 }
 
 void DDEMpris2Plugin::playbackStatusChanged(QString status) {
-//    std::cout << "Status: " << status.toStdString() << std::endl;
-//    if (status == "Playing") {
-//        this->posTimer_p->stop();
-//        this->posTimer_p->start(500);
-//    } else if (status == "Paused" || status == "Stopped" ) {
-//        this->posTimer_p->stop();
-//    }
     bool isPlaying = status == "Playing";
     this->p_mpris2Widget->setPlayPauseStatus(isPlaying);
     this->p_itemWidget->setPlayblackStatus(isPlaying);

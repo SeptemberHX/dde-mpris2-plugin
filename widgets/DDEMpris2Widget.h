@@ -18,6 +18,7 @@ public:
 
     void showStatus(PlayerStatus status);
     void updatePosition(qlonglong position);
+    void resetToDefault();
 
     const PlayerStatus& getStatus();
     void setPlayPauseStatus(bool isPlaying);
@@ -30,6 +31,8 @@ signals:
 private:
     Ui::DDEMpris2Widget *ui;
     PlayerStatus currStatus;
+
+    bool isDefault;
 };
 
 #endif // DDEMPRIS2WIDGET_H
