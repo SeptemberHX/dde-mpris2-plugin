@@ -4,5 +4,6 @@
         <file>resources/pause-black.svg</file>
         <file>resources/play-black.svg</file>
         <file>resources/prev-black.svg</file>
+        <file>resources/disc.svg</file>
     </qresource>
 </RCC>

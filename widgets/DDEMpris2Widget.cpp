@@ -18,6 +18,7 @@ DDEMpris2Widget::DDEMpris2Widget(QWidget *parent) :
     ui->prevButton->setIcon(QIcon(":/icons/resources/prev-black.svg"));
     ui->nextButton->setIcon(QIcon(":/icons/resources/next-black.svg"));
     ui->pausePlayButton->setIcon(QIcon(":/icons/resources/play-black.svg"));
+    ui->artLabel->setScaledContents(true);
 
     this->resetToDefault();
 }
@@ -38,7 +39,13 @@ void DDEMpris2Widget::showStatus(PlayerStatus status) {
     QUrl url = this->currStatus.getArtUrl();
     if (url.isValid()) {
         QImage image(url.path());
-        ui->artLabel->setPixmap(QPixmap::fromImage(image).scaled(ui->artLabel->size()));
+        if (image.isNull()) {
+            image = QImage(":/icons/resources/disc.svg");
+        }
+
+        QPixmap pixmap = QPixmap::fromImage(image);
+        pixmap.setDevicePixelRatio(ui->artLabel->devicePixelRatioF());
+        ui->artLabel->setPixmap(QPixmap::fromImage(image));
     }
     this->updatePosition(status.getPosition());
 

@@ -13,6 +13,7 @@ DDEMpris2ItemWidget::DDEMpris2ItemWidget(QWidget *parent) :
     ui->playPauseButton->setIcon(QIcon(":/icons/resources/play-black.svg"));
     ui->entryLabel->hide();
     ui->entryLabel->installEventFilter(this);
+    ui->entryLabel->setScaledContents(true);
 
     connect(ui->prevButton, &QToolButton::clicked, this, [this] () { Q_EMIT prevClicked(); });
     connect(ui->playPauseButton, &QToolButton::clicked, this, [this] () { Q_EMIT playPauseClicked(); });
@@ -50,7 +51,10 @@ void DDEMpris2ItemWidget::setDesktopEntry(QString entry) {
         ui->entryLabel->hide();
     } else {
         ui->entryLabel->show();
-        ui->entryLabel->setPixmap(QIcon::fromTheme(this->currEntry).pixmap(ui->entryLabel->sizeHint()));
+        QIcon icon = QIcon::fromTheme(this->currEntry);
+        QPixmap pixmap = icon.pixmap(ui->entryLabel->sizeHint() * ui->entryLabel->devicePixelRatioF());
+        pixmap.setDevicePixelRatio(ui->entryLabel->devicePixelRatioF());
+        ui->entryLabel->setPixmap(pixmap);
     }
 }
 
