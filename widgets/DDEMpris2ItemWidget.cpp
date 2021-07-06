@@ -78,11 +78,11 @@ bool DDEMpris2ItemWidget::eventFilter(QObject *obj, QEvent *event) {
 }
 
 QString DDEMpris2ItemWidget::text() {
-    return ui->label->text();
+    return ui->label->text().trimmed();
 }
 
 void DDEMpris2ItemWidget::setText(QString text, qlonglong t) {
-    ui->label->setText(text, t);
+    ui->label->setText(QString("  %1  ").arg(text), t);
 }
 
 void DDEMpris2ItemWidget::hideDesktopEntry() {
