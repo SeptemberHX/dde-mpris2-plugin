@@ -22,6 +22,7 @@ public:
 
     void setPlayblackStatus(bool isPlaying);
     void setDesktopEntry(QString entry);
+    void hideDesktopEntry();
 
 signals:
     void prevClicked();

@@ -197,6 +197,8 @@ void DDEMpris2Plugin::setPlayerStatus(Mpris2Player *player, PlayerStatus status)
 
 void DDEMpris2Plugin::resetStatus() {
     this->p_itemWidget->setText(this->defaultStr);
+    this->p_mpris2Widget->resetToDefault();
+    this->p_itemWidget->hideDesktopEntry();
     this->currPlayer = nullptr;
 }
 

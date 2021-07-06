@@ -84,3 +84,7 @@ QString DDEMpris2ItemWidget::text() {
 void DDEMpris2ItemWidget::setText(QString text, qlonglong t) {
     ui->label->setText(text, t);
 }
+
+void DDEMpris2ItemWidget::hideDesktopEntry() {
+    ui->entryLabel->hide();
+}

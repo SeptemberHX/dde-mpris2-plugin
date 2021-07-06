@@ -86,10 +86,15 @@ void DDEMpris2Widget::setPlayPauseStatus(bool isPlaying) {
 
 void DDEMpris2Widget::resetToDefault() {
     if (!this->isDefault) {
-        ui->titleLabel->setText(tr("没有音乐播放器"));
+        ui->titleLabel->setText("");
         ui->artistLabel->setText("");
-        ui->albumLabel->setText("");
-        ui->artLabel->clear();
+        ui->albumLabel->setText(tr("没有音乐播放器"));
+
+        QImage image(":/icons/resources/disc.svg");
+        QPixmap pixmap = QPixmap::fromImage(image);
+        pixmap.setDevicePixelRatio(ui->artLabel->devicePixelRatioF());
+        ui->artLabel->setPixmap(QPixmap::fromImage(image));
+
         this->updatePosition(0);
         ui->leftLabel->setText(0);
 
