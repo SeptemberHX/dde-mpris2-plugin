@@ -19,7 +19,7 @@ DDEMpris2Plugin::DDEMpris2Plugin(QObject *parent) : QObject(parent) {
 
     this->p_itemWidget = new DDEMpris2ItemWidget();
     this->p_itemWidget->setFixedWidth(250);
-    this->p_itemWidget->setTextAlign(Qt::AlignHCenter);
+    this->p_itemWidget->setTextAlign(Qt::AlignCenter);
     this->p_itemWidget->setText(this->defaultStr);
     connect(this->p_itemWidget, &DDEMpris2ItemWidget::prevClicked, this, &DDEMpris2Plugin::prev);
     connect(this->p_itemWidget, &DDEMpris2ItemWidget::playPauseClicked, this, &DDEMpris2Plugin::playPause);

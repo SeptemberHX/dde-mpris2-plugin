@@ -53,9 +53,9 @@ void ScrollLabel::paintEvent(QPaintEvent *event) {
         textStr += this->spaceStr + text();
     }
 
-    int flags = this->alignment();
+    int flags = Qt::AlignCenter;
     if (this->scrollTimer_p->isActive()) {
-        flags &= Qt::AlignLeft;
+        flags = Qt::AlignLeft | Qt::AlignVCenter;
     }
     painter.drawText(rect, flags, textStr);
 }
