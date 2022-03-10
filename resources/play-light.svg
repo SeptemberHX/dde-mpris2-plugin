@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   t="1621150372020"
+   class="icon"
+   viewBox="0 0 1024 1024"
+   version="1.1"
+   p-id="4667"
+   width="200"
+   height="200"
+   id="svg57"
+   sodipodi:docname="play-light.svg"
+   inkscape:version="1.1 (c4e8f9e, 2021-05-24)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview59"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="3.845"
+     inkscape:cx="100.13004"
+     inkscape:cy="98.829649"
+     inkscape:window-width="1870"
+     inkscape:window-height="1000"
+     inkscape:window-x="50"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg57" />
+  <defs
+     id="defs53">
+    <style
+       type="text/css"
+       id="style51" />
+  </defs>
+  <path
+     d="M289.5 844.3V179.7l445 332.3-445 332.3z"
+     fill=""
+     p-id="4668"
+     id="path55" />
+  <path
+     style="fill:#ffffff;stroke-width:0.260078"
+     d="m 56.56697,99.982902 c 0,-51.704069 0.0652,-64.624585 0.325098,-64.419726 C 57.070871,35.704117 76.469441,50.185028 100,67.74298 c 23.53056,17.557951 42.86989,32.003709 42.97629,32.101686 0.13602,0.125246 -80.562254,60.674684 -85.929291,64.474374 -0.466277,0.33011 -0.480029,-1.51294 -0.480029,-64.336138 z"
+     id="path215"
+     transform="scale(5.12)" />
+</svg>

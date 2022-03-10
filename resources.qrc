@@ -4,6 +4,10 @@
         <file>resources/pause-black.svg</file>
         <file>resources/play-black.svg</file>
         <file>resources/prev-black.svg</file>
+        <file>resources/next-light.svg</file>
+        <file>resources/pause-light.svg</file>
+        <file>resources/play-light.svg</file>
+        <file>resources/prev-light.svg</file>
         <file>resources/disc.svg</file>
     </qresource>
 </RCC>

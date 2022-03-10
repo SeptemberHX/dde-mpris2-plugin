@@ -23,6 +23,9 @@ public:
     const PlayerStatus& getStatus();
     void setPlayPauseStatus(bool isPlaying);
 
+    void setFontColor(QColor color);
+    void setThemeIcon(bool dark);
+
 signals:
     void prevClicked();
     void nextClicked();
@@ -33,6 +36,7 @@ private:
     PlayerStatus currStatus;
 
     bool isDefault;
+    bool dark;
 };
 
 #endif // DDEMPRIS2WIDGET_H

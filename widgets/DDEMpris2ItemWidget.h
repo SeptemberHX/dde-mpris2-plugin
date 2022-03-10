@@ -23,6 +23,8 @@ public:
     void setPlayblackStatus(bool isPlaying);
     void setDesktopEntry(QString entry);
     void hideDesktopEntry();
+    void setFontColor(QColor color);
+    void setThemeIcon(bool dark);
 
 signals:
     void prevClicked();
@@ -35,6 +37,8 @@ private:
 
     Ui::DDEMpris2ItemWidget *ui;
     QString currEntry;
+
+    bool dark;
 };
 
 #endif // DDEMPRIS2ITEMWIDGET_H

@@ -20,6 +20,9 @@
 #include "lyric/AbstractLyricFetcher.h"
 #include "lyric/QQLyricFetcher.h"
 #include "lyric/MLyric.h"
+#include <DGuiApplicationHelper>
+
+DGUI_USE_NAMESPACE
 
 class DDEMpris2Plugin : public QObject, public PluginsItemInterface {
     Q_OBJECT
@@ -68,6 +71,8 @@ private:
     void setToLastPlayer();
     void setPlayerStatus(Mpris2Player *player, PlayerStatus status);
     void resetStatus();
+
+    void setTheme(DGuiApplicationHelper::ColorType theme);
 
     DBusMonitor *p_mprisMonitor;
     DDEMpris2ItemWidget *p_itemWidget;

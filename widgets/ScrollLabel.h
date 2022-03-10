@@ -12,6 +12,7 @@ public:
     ScrollLabel(QWidget *parent = nullptr);
     void setText(const QString &text);
     void setText(const QString &text, qlonglong timeInUs);
+    void setFontColor(QColor color);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -26,6 +27,8 @@ private:
     QString spaceStr;
 
     qlonglong drawTimeLength;
+
+    QColor fontColor = Qt::black;
 };
 
 #endif // SCROLLLABEL_H

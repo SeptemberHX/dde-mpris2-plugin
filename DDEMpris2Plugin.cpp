@@ -72,6 +72,11 @@ DDEMpris2Plugin::DDEMpris2Plugin(QObject *parent) : QObject(parent) {
     this->p_mprisMonitor->init();
 
     this->posTimer_p->start(200);
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [this] () {
+        this->setTheme(DGuiApplicationHelper::instance()->themeType());
+    });
+    this->setTheme(DGuiApplicationHelper::instance()->themeType());
 }
 
 const QString DDEMpris2Plugin::pluginName() const {
@@ -249,4 +254,23 @@ void DDEMpris2Plugin::showLyric(qlonglong t) {
 
 qlonglong DDEMpris2Plugin::getCurrPos() const {
     return currPos;
+}
+
+void DDEMpris2Plugin::setTheme(DGuiApplicationHelper::ColorType theme) {
+    switch (theme) {
+        case Dtk::Gui::DGuiApplicationHelper::DarkType:
+            this->p_itemWidget->setFontColor(Qt::white);
+            this->p_mpris2Widget->setFontColor(Qt::white);
+            this->p_itemWidget->setThemeIcon(true);
+            this->p_mpris2Widget->setThemeIcon(true);
+            break;
+        case Dtk::Gui::DGuiApplicationHelper::LightType:
+            this->p_itemWidget->setFontColor(Qt::black);
+            this->p_mpris2Widget->setFontColor(Qt::black);
+            this->p_itemWidget->setThemeIcon(false);
+            this->p_mpris2Widget->setThemeIcon(false);
+            break;
+        default:
+            break;
+    }
 }

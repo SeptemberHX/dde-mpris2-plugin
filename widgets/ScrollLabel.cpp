@@ -43,7 +43,7 @@ void ScrollLabel::scrollTimerEvent() {
 
 void ScrollLabel::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
-    painter.setPen(QPen(Qt::black));
+    painter.setPen(QPen(this->fontColor));
 
     QRect rect = this->rect();
     rect.setLeft(rect.left() - offset);
@@ -88,4 +88,9 @@ void ScrollLabel::setText(const QString &text, qlonglong timeInUs) {
     this->offset = 0;
     this->drawTimeLength = timeInUs;
     this->checkStr();
+}
+
+void ScrollLabel::setFontColor(QColor color) {
+    this->fontColor = color;
+    this->repaint();
 }

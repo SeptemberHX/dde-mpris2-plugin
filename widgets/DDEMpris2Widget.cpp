@@ -15,9 +15,7 @@ DDEMpris2Widget::DDEMpris2Widget(QWidget *parent) :
     connect(ui->pausePlayButton, &QToolButton::clicked, this, [this] () { Q_EMIT pausePlayClicked(); });
     connect(ui->nextButton, &QToolButton::clicked, this, [this] () { Q_EMIT nextClicked(); });
 
-    ui->prevButton->setIcon(QIcon(":/icons/resources/prev-black.svg"));
-    ui->nextButton->setIcon(QIcon(":/icons/resources/next-black.svg"));
-    ui->pausePlayButton->setIcon(QIcon(":/icons/resources/play-black.svg"));
+    this->setThemeIcon(false);
     ui->artLabel->setScaledContents(true);
 
     this->resetToDefault();
@@ -78,9 +76,17 @@ const PlayerStatus& DDEMpris2Widget::getStatus() {
 
 void DDEMpris2Widget::setPlayPauseStatus(bool isPlaying) {
     if (!isPlaying) {
-        ui->pausePlayButton->setIcon(QIcon(":/icons/resources/play-black.svg"));
+        if (!this->dark) {
+            ui->pausePlayButton->setIcon(QIcon(":/icons/resources/play-black.svg"));
+        } else {
+            ui->pausePlayButton->setIcon(QIcon(":/icons/resources/play-light.svg"));
+        }
     } else {
-        ui->pausePlayButton->setIcon(QIcon(":/icons/resources/pause-black.svg"));
+        if (!this->dark) {
+            ui->pausePlayButton->setIcon(QIcon(":/icons/resources/pause-black.svg"));
+        } else {
+            ui->pausePlayButton->setIcon(QIcon(":/icons/resources/pause-light.svg"));
+        }
     }
 }
 
@@ -102,5 +108,24 @@ void DDEMpris2Widget::resetToDefault() {
         ui->prevButton->setEnabled(false);
         ui->pausePlayButton->setEnabled(false);
         this->isDefault = true;
+    }
+}
+
+void DDEMpris2Widget::setFontColor(QColor color) {
+    ui->albumLabel->setFontColor(color);
+    ui->artistLabel->setFontColor(color);
+    ui->titleLabel->setFontColor(color);
+}
+
+void DDEMpris2Widget::setThemeIcon(bool dark) {
+    this->dark = dark;
+    if (dark) {
+        ui->prevButton->setIcon(QIcon(":/icons/resources/prev-light.svg"));
+        ui->nextButton->setIcon(QIcon(":/icons/resources/next-light.svg"));
+        ui->pausePlayButton->setIcon(QIcon(":/icons/resources/play-light.svg"));
+    } else {
+        ui->prevButton->setIcon(QIcon(":/icons/resources/prev-black.svg"));
+        ui->nextButton->setIcon(QIcon(":/icons/resources/next-black.svg"));
+        ui->pausePlayButton->setIcon(QIcon(":/icons/resources/play-black.svg"));
     }
 }
