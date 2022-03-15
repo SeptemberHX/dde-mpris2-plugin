@@ -86,7 +86,7 @@ qlonglong Mpris2Player::position() {
 void Mpris2Player::propertyChanged(QString name, QVariantMap map, QStringList list)
 {
     if (map.contains("PlaybackStatus")) {
-        std::cout << map.value("PlaybackStatus").toString().toStdString() << std::endl;
+//        std::cout << map.value("PlaybackStatus").toString().toStdString() << std::endl;
         emit playStatusChanged(map.value("PlaybackStatus").toString());
     }
 
@@ -105,7 +105,7 @@ void Mpris2Player::propertyChanged(QString name, QVariantMap map, QStringList li
 
 void Mpris2Player::positionSeeked(qlonglong p)
 {
-    std::cout << "=======" << std::endl;
+//    std::cout << "=======" << std::endl;
     emit seeked(p);
 }
 

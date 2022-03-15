@@ -84,6 +84,11 @@ void ScrollLabel::setText(const QString &text) {
 
 void ScrollLabel::setText(const QString &text, qlonglong timeInUs) {
     if (timeInUs < 0) timeInUs = 0;
+
+    if (text == this->text() && timeInUs == this->drawTimeLength) {
+        return;
+    }
+
     QLabel::setText(text);
     this->offset = 0;
     this->drawTimeLength = timeInUs;
