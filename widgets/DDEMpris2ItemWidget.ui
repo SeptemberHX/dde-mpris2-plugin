@@ -62,7 +62,7 @@
         <property name="minimumSize">
          <size>
           <width>24</width>
-          <height>24</height>
+          <height>16</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -81,7 +81,7 @@
         <property name="minimumSize">
          <size>
           <width>24</width>
-          <height>24</height>
+          <height>16</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -100,7 +100,7 @@
         <property name="minimumSize">
          <size>
           <width>24</width>
-          <height>24</height>
+          <height>16</height>
          </size>
         </property>
         <property name="maximumSize">
